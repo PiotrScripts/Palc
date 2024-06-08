@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "gZp5Mogwm5INQRZHdVSd/g6m8gRUSfiR+RBGxXXzfu6n4mSAwMO+V/7tdQVRrt/XOUHSAlt0nhyBpYPma+ob3w==",
+  "success": true,
+  "projectFilePath": "/home/piotr/repos/Palc/Palc.csproj",
+  "expectedPackageFiles": [
+    "/home/piotr/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.6/microsoft.aspnetcore.app.ref.8.0.6.nupkg.sha512"
+  ],
+  "logs": []
+}
