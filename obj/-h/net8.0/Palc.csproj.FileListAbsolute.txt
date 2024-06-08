@@ -1,0 +1,15 @@
+/home/piotr/repos/Palc/bin/-h/net8.0/Palc
+/home/piotr/repos/Palc/bin/-h/net8.0/Palc.deps.json
+/home/piotr/repos/Palc/bin/-h/net8.0/Palc.runtimeconfig.json
+/home/piotr/repos/Palc/bin/-h/net8.0/Palc.dll
+/home/piotr/repos/Palc/bin/-h/net8.0/Palc.pdb
+/home/piotr/repos/Palc/obj/-h/net8.0/Palc.GeneratedMSBuildEditorConfig.editorconfig
+/home/piotr/repos/Palc/obj/-h/net8.0/Palc.AssemblyInfoInputs.cache
+/home/piotr/repos/Palc/obj/-h/net8.0/Palc.AssemblyInfo.cs
+/home/piotr/repos/Palc/obj/-h/net8.0/Palc.csproj.CoreCompileInputs.cache
+/home/piotr/repos/Palc/obj/-h/net8.0/Palc.sourcelink.json
+/home/piotr/repos/Palc/obj/-h/net8.0/Palc.dll
+/home/piotr/repos/Palc/obj/-h/net8.0/refint/Palc.dll
+/home/piotr/repos/Palc/obj/-h/net8.0/Palc.pdb
+/home/piotr/repos/Palc/obj/-h/net8.0/Palc.genruntimeconfig.cache
+/home/piotr/repos/Palc/obj/-h/net8.0/ref/Palc.dll

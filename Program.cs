@@ -12,6 +12,25 @@
                 continue;
             }
 
+            switch (input.Trim().ToLower())
+            {
+                case "exit":
+                    Environment.Exit(0);
+                    continue;
+                case "clear":
+                    Console.Clear();
+                    continue;
+                case "reset":
+                    variables.Clear();
+                    continue;
+                case "vars":
+                    foreach (var varibale in variables)
+                    {
+                        Console.WriteLine($"{varibale.Key} = {varibale.Value}");
+                    }
+                    continue;
+            }
+
             var tokens = Tokenize(input);
 
             if (tokens.Count == 0)
