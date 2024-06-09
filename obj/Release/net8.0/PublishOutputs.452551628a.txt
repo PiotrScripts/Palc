@@ -1,0 +1,5 @@
+/home/piotr/repos/Palc/bin/Release/net8.0/publish/Palc
+/home/piotr/repos/Palc/bin/Release/net8.0/publish/Palc.dll
+/home/piotr/repos/Palc/bin/Release/net8.0/publish/Palc.deps.json
+/home/piotr/repos/Palc/bin/Release/net8.0/publish/Palc.runtimeconfig.json
+/home/piotr/repos/Palc/bin/Release/net8.0/publish/Palc.pdb

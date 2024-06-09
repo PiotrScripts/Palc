@@ -70,7 +70,14 @@
             }
             else
             {
-                Console.WriteLine(Evaluate(tokens));
+                if (print)
+                {
+                    Console.WriteLine(Evaluate(tokens));
+                }
+                else
+                {
+                    Evaluate(tokens);
+                }
             }
         }
     }
