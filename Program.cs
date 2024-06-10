@@ -12,36 +12,21 @@
                 continue;
             }
 
-            switch (input.Trim().ToLower())
+            if (Command(input))
             {
-                case "exit":
-                    Environment.Exit(0);
-                    continue;
-                case "clear":
-                    Console.Clear();
-                    continue;
-                case "reset":
-                    variables.Clear();
-                    continue;
-                case "vars":
-                    foreach (var varibale in variables)
-                    {
-                        Console.WriteLine($"{varibale.Key} = {varibale.Value}");
-                    }
-                    continue;
+                continue;
             }
 
             var tokens = Tokenize(input);
 
             if (tokens.Count == 0)
             {
-                Console.WriteLine("Invalid input");
                 continue;
             }
 
             if (!ValidateParens(tokens.ToArray()))
             {
-                Console.WriteLine("Invalid parens");
+                Console.WriteLine("Invalid parens.");
                 continue;
             }
 
@@ -52,107 +37,124 @@
                 tokens.RemoveAt(0);
             }
 
-            if (tokens.Count == 0)
+            char? letter = null;
+            if (2 < tokens.Count() && tokens[0].Type == TokenType.Letter && tokens[1].Type == TokenType.Equal)
             {
-                Console.WriteLine("Invalid input");
+                letter = (char)tokens[0].Value;
+                tokens.RemoveRange(0, 2);
+            }
+
+            var output = Evaluate(tokens);
+            if (!output.HasValue)
+            {
                 continue;
             }
 
-            if (2 < tokens.Count() && tokens[0].Type == TokenType.Letter && tokens[1].Type == TokenType.Equal)
+            if (letter.HasValue)
             {
-                char letter = (char)tokens[0].Value;
-                tokens.RemoveRange(0, 2);
-                SetVariable(letter, Evaluate(tokens));
-                if (print)
+                variables[letter.Value] = output.Value;
+            }
+
+            if (print)
+            {
+                Console.WriteLine(output.Value);
+            }
+        }
+    }
+
+    static bool Command(string input)
+    {
+        switch (input.Trim().ToLower())
+        {
+            case "exit":
+                Environment.Exit(0);
+                return true;
+            case "clear":
+                Console.Clear();
+                return true;
+            case "reset":
+                variables.Clear();
+                return true;
+            case "vars":
+                foreach (var varibale in variables)
                 {
-                    Console.WriteLine(variables[letter]);
+                    Console.WriteLine($"{varibale.Key} = {varibale.Value}");
+                }
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    static decimal? Evaluate(List<Token> tokens)
+    {
+        try
+        {
+            if (tokens.Count() == 1)
+            {
+                if (tokens[0].Type == TokenType.Number)
+                {
+                    return (decimal)tokens[0].Value;
+                }
+                else if (tokens[0].Type == TokenType.Letter)
+                {
+                    return variables[(char)tokens[0].Value];
                 }
             }
-            else
+
+            var operators = new Stack<Token>();
+            var operands = new Stack<decimal>();
+
+            for (int i = 0; i < tokens.Count(); i++)
             {
-                if (print)
+                var token = tokens[i];
+
+                if (token.Type == TokenType.Number)
                 {
-                    Console.WriteLine(Evaluate(tokens));
+                    operands.Push((decimal)token.Value);
+                }
+                else if (token.Type == TokenType.Letter)
+                {
+                    operands.Push(variables[(char)token.Value]);
+                }
+                else if (token.Type == TokenType.LeftParn)
+                {
+                    operators.Push(token);
+                }
+                else if (token.Type == TokenType.RightParn)
+                {
+                    while (operators.Peek().Type != TokenType.LeftParn)
+                    {
+                        operands.Push(ApplyOperator(operators.Pop(), operands.Pop(), operands.Pop()));
+                    }
+
+                    operators.Pop();
                 }
                 else
                 {
-                    Evaluate(tokens);
+                    while (operators.Count > 0 && Precedence(operators.Peek()) >= Precedence(token))
+                    {
+                        operands.Push(ApplyOperator(operators.Pop(), operands.Pop(), operands.Pop()));
+                    }
+
+                    operators.Push(token);
                 }
             }
-        }
-    }
 
-    static void SetVariable(char name, decimal value)
-    {
-        if (variables.ContainsKey(name))
+            while (operators.Count > 0)
+            {
+                operands.Push(ApplyOperator(operators.Pop(), operands.Pop(), operands.Pop()));
+            }
+
+            return operands.Pop();
+
+        }
+        catch (Exception e)
         {
-            variables[name] = value;
+            Console.WriteLine("Failed to evaluate.");
+            Console.WriteLine(e.Message);
+            return null;
         }
-        else
-        {
-            variables.Add(name, value);
-        }
-    }
-
-    static decimal Evaluate(List<Token> tokens)
-    {
-        if (tokens.Count() == 1)
-        {
-            if (tokens[0].Type == TokenType.Number)
-            {
-                return (decimal)tokens[0].Value;
-            }
-            else if (tokens[0].Type == TokenType.Letter)
-            {
-                return variables[(char)tokens[0].Value];
-            }
-        }
-
-        var operators = new Stack<Token>();
-        var operands = new Stack<decimal>();
-
-        for (int i = 0; i < tokens.Count(); i++)
-        {
-            var token = tokens[i];
-
-            if (token.Type == TokenType.Number)
-            {
-                operands.Push((decimal)token.Value);
-            }
-            else if (token.Type == TokenType.Letter)
-            {
-                operands.Push(variables[(char)token.Value]);
-            }
-            else if (token.Type == TokenType.LeftParn)
-            {
-                operators.Push(token);
-            }
-            else if (token.Type == TokenType.RightParn)
-            {
-                while (operators.Peek().Type != TokenType.LeftParn)
-                {
-                    operands.Push(ApplyOperator(operators.Pop(), operands.Pop(), operands.Pop()));
-                }
-
-                operators.Pop();
-            }
-            else
-            {
-                while (operators.Count > 0 && Precedence(operators.Peek()) >= Precedence(token))
-                {
-                    operands.Push(ApplyOperator(operators.Pop(), operands.Pop(), operands.Pop()));
-                }
-
-                operators.Push(token);
-            }
-        }
-
-        while (operators.Count > 0)
-        {
-            operands.Push(ApplyOperator(operators.Pop(), operands.Pop(), operands.Pop()));
-        }
-
-        return operands.Pop();
     }
 
     static decimal ApplyOperator(Token token, decimal b, decimal a)
@@ -168,7 +170,7 @@
             case TokenType.Slash:
                 return a / b;
             default:
-                throw new Exception("Invalid operator");
+                throw new Exception("Invalid operator.");
         }
     }
 
@@ -275,28 +277,5 @@
         }
 
         return tokens;
-    }
-}
-
-enum TokenType
-{
-    LeftParn, RightParn,
-    Plus, Minus,
-    Star, Slash,
-    Number,
-    Letter,
-    Equal,
-    Bang
-}
-
-class Token
-{
-    public TokenType Type { get; set; }
-    public object? Value { get; set; }
-
-    public Token(TokenType type, object? value = null)
-    {
-        Type = type;
-        Value = value;
     }
 }
