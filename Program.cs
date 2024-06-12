@@ -6,7 +6,17 @@
     {
         while (true)
         {
-            string? input = Console.ReadLine();
+            string? input;
+            if (args.Length > 0)
+            {
+                input = string.Join(" ", args);
+                args = new string[0];
+            }
+            else
+            {
+                input = Console.ReadLine();
+            }
+
             if (string.IsNullOrWhiteSpace(input))
             {
                 continue;

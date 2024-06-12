@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Palc")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b0a2faf460947b66dc3b420755ccb6eaf4ad7cc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+672ac339d157a14ff067d06674131326bea5d03d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Palc")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Palc")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
