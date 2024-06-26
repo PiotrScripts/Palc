@@ -27,46 +27,54 @@
                 continue;
             }
 
-            var tokens = Tokenize(input);
+            var allTokens = Tokenize(input);
 
-            if (tokens.Count == 0)
+            if (allTokens.Count == 0)
             {
                 continue;
             }
 
-            if (!ValidateParens(tokens.ToArray()))
+            if (!ValidateParens(allTokens.ToArray()))
             {
                 Console.WriteLine("Invalid parens.");
                 continue;
             }
 
-            bool print = false;
-            if (tokens[0].Type == TokenType.Bang)
+            List<List<Token>> allTokenLists = [[]];
+            int listIndex = 0;
+            for (int i = 0; i < allTokens.Count(); i++)
             {
-                print = true;
-                tokens.RemoveAt(0);
-            }
+                allTokenLists[listIndex].Add(allTokens[i]);
 
-            char? letter = null;
-            if (2 < tokens.Count() && tokens[0].Type == TokenType.Letter && tokens[1].Type == TokenType.Equal)
-            {
-                letter = (char)tokens[0].Value;
-                tokens.RemoveRange(0, 2);
+                if (i + 1 < allTokens.Count() && (allTokens[i].Type == TokenType.Letter || allTokens[i].Type == TokenType.Number)
+                    && (allTokens[i + 1].Type == TokenType.Letter || allTokens[i + 1].Type == TokenType.Number))
+                {
+                    allTokenLists.Add([]);
+                    listIndex++;
+                }
             }
+            allTokens = null;
 
-            var output = Evaluate(tokens);
-            if (!output.HasValue)
+            foreach (var tokens in allTokenLists)
             {
-                continue;
-            }
+                char? letter = null;
+                if (2 < tokens.Count() && tokens[0].Type == TokenType.Letter && tokens[1].Type == TokenType.Equal)
+                {
+                    letter = (char)tokens[0].Value;
+                    tokens.RemoveRange(0, 2);
+                }
 
-            if (letter.HasValue)
-            {
-                variables[letter.Value] = output.Value;
-            }
+                var output = Evaluate(tokens);
+                if (!output.HasValue)
+                {
+                    continue;
+                }
 
-            if (print)
-            {
+                if (letter.HasValue)
+                {
+                    variables[letter.Value] = output.Value;
+                }
+
                 Console.WriteLine(output.Value);
             }
         }
@@ -234,9 +242,6 @@
             switch (c)
             {
                 case ' ':
-                    break;
-                case '!':
-                    tokens.Add(new Token(TokenType.Bang));
                     break;
                 case '(':
                     tokens.Add(new Token(TokenType.LeftParn));

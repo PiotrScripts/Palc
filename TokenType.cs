@@ -5,6 +5,5 @@ enum TokenType
     Star, Slash,
     Number,
     Letter,
-    Equal,
-    Bang
+    Equal
 }
